@@ -5,7 +5,7 @@ const wss = new WebSocket.Server({ port: 3000 });
 wss.on('connection', socket => {
   console.log('Client connected');
 
-  socket.send('Welcome to the WebSocket server!\nPlease enter two numbers separated by a space: \n');
+  socket.send('Welcome to the WebSocket server!\nPlease enter two numbers separated by a space: \n. let a=3,b=5, then the data you send to socket server should be like this :"3,5"');
 
   socket.on('message', data => {
 
