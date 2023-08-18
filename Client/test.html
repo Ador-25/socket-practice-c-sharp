@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Socket Client</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+  }
+  input {
+    width: 80px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<h1>Socket Client</h1>
+<p id="response"></p>
+<input type="number" id="num1" placeholder="Number 1">
+<input type="number" id="num2" placeholder="Number 2">
+<button id="calculate">Calculate Sum</button>
+
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const responseElement = document.getElementById("response");
+  const num1Input = document.getElementById("num1");
+  const num2Input = document.getElementById("num2");
+  const calculateButton = document.getElementById("calculate");
+
+  const socket = new WebSocket("ws://localhost:3000");
+
+  socket.addEventListener("open", () => {
+    responseElement.textContent = "Connected to the server.";
+  });
+
+  socket.addEventListener("message", event => {
+  const receivedMessage = event.data;
+  responseElement.textContent += receivedMessage + '\n';  // Append the new message
+  console.log(event.data);  // Logging to console
+});
+
+
+  socket.addEventListener("close", () => {
+    responseElement.textContent = "Connection closed.";
+  });
+
+  calculateButton.addEventListener("click", () => {
+    const num1 = num1Input.value;
+    const num2 = num2Input.value;
+    
+    if (num1 && num2) {
+      socket.send(`${num1} ${num2}`);
+    }
+  });
+});
+</script>
+</body>
+</html>
