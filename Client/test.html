@@ -8,16 +8,58 @@
   body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
   }
+  
+  h1 {
+    margin-top: 20px;
+    color: #333;
+  }
+  
+  p {
+    color: #666;
+  }
+  
+  #response {
+    margin-top: 20px;
+  }
+  
   input {
     width: 80px;
-    text-align: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 5px;
   }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
   .new-message {
     margin-bottom: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
+  
   .chat-message {
     font-size: 16px;
+    color: #333;
   }
 </style>
 </head>
@@ -28,12 +70,12 @@
 <input type="number" id="num2" placeholder="Number 2">
 <button id="calculate">Calculate Sum</button>
 
-
-</div>
+<div id="messages"></div>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const responseElement = document.getElementById("response");
+  const messagesElement = document.getElementById("messages");
   const num1Input = document.getElementById("num1");
   const num2Input = document.getElementById("num2");
   const calculateButton = document.getElementById("calculate");
@@ -45,20 +87,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   socket.addEventListener("message", event => {
-  const receivedMessage = event.data;
+    const receivedMessage = event.data;
 
-  const newMessageDiv = document.createElement('div');
-  newMessageDiv.classList.add('new-message');
+    const newMessageDiv = document.createElement('div');
+    newMessageDiv.classList.add('new-message');
 
-  const newMessageP = document.createElement('p');
-  newMessageP.classList.add('chat-message');
-  newMessageP.textContent = receivedMessage;
+    const newMessageP = document.createElement('p');
+    newMessageP.classList.add('chat-message');
+    newMessageP.textContent = receivedMessage;
 
-  newMessageDiv.appendChild(newMessageP);
+    newMessageDiv.appendChild(newMessageP);
 
-  responseElement.appendChild(newMessageDiv);
-});
-
+    messagesElement.appendChild(newMessageDiv);
+  });
 
   socket.addEventListener("close", () => {
     responseElement.textContent = "Connection closed.";
@@ -67,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
   calculateButton.addEventListener("click", () => {
     const num1 = num1Input.value;
     const num2 = num2Input.value;
-    
+
     if (num1 && num2) {
       socket.send(`${num1} ${num2}`);
     }
